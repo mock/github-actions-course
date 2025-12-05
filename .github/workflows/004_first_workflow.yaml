@@ -1,0 +1,24 @@
+name: 04 workflow dispatch
+
+on:
+  workflow_dispatch:
+    inputs:
+      username:
+        descripion: 'Username'
+        default: 'Mark'
+        required: true
+        type: string
+      age:
+        description: 'Age'
+        required: true
+        type: number
+
+jobs:
+  echo-username-age:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo Username and Age
+        run: |
+          echo "Username: ${{ inputs.username }}"
+          echo "Age: $${{ inputs.age }}"
+
