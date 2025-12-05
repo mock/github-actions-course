@@ -23,6 +23,7 @@ jobs:
           cd backend
           tox -e unit
           ls -al ${{ github.workspace }}/backend
+          echo "Any coverage files?"
           ls -al ${{ github.workspace }}/backend/.coverage
 
       - name: Upload artifact
