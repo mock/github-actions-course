@@ -10,10 +10,10 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: Install Python 3.13
+      - name: Install Python 3.14
         uses: actions/setup-python@v4
         with:
-          python-version: '3.13'
+          python-version: '3.14'
 
       - name: Install tox
         run: pip install tox
@@ -29,6 +29,7 @@ jobs:
         with:
           name: coverage
           path: ${{ github.workspace }}/backend/.coverage
+          include-hidden-files: true
 
   load-file-example:
     runs-on: ubuntu-latest
