@@ -23,6 +23,7 @@ jobs:
           cd backend
           tox -e unit
           ls -al ${{ github.workspace }}/backend
+          ls -al ${{ github.workspace }}/backend/.coverage
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
