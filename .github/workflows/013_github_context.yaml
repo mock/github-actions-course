@@ -1,0 +1,15 @@
+name: 13 Github Context
+
+on:
+  workflow_dispatch:
+
+jobs:
+  print-variables:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Variables
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run:
+          echo "$GITHUB_CONTEXT"
+
