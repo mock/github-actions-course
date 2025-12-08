@@ -57,7 +57,7 @@ jobs:
           tags: ${{ vars.DOCKER_HUB_IMAGE }}:${{ inputs.image-tag }}
           outputs: type=docker,dest=/tmp/image.tar
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: image
           path: /tmp/image.tar
@@ -67,7 +67,7 @@ jobs:
     needs: [lint, unit-test]
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: image
           path: /tmp
@@ -84,7 +84,7 @@ jobs:
     needs: [build-image]
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: image
           path: /tmp
@@ -96,7 +96,7 @@ jobs:
           output: 'trivy-results.json'
           severity: 'CRITICAL,HIGH'
       - name: Upload results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: trivy-results
           path: ${{ github.workspace }}/trivy-results.json
@@ -106,7 +106,7 @@ jobs:
     needs: [integration-tests, vulnerability-scan]
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: image
           path: /tmp
