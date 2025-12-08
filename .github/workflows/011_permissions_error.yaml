@@ -1,0 +1,27 @@
+name: 11 Permissions Error
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+
+jobs:
+  example-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Attempt Write Operation
+        run: |
+          touch new-file.txt
+          git config --global user.name "Mark McIntyre"
+          git config --global user.email "mark@mocktech.net"
+          git add new-file.txt
+          git commit -m "attempt to write"
+          git push origin ${{ github.ref }}
+        continue-on-error: true
+
+
