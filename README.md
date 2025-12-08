@@ -8,3 +8,5 @@
 
 **Github Actions course:** GitHub - misohu/github-actions-course: Course for github actions
 
+More details to come!
+
