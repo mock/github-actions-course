@@ -44,6 +44,26 @@ jobs:
 
   build-image:
     runs-on: ubuntu-latest
+    needs: [lint, unit-tests]
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-actions@v3
+      - name: Build and Export
+        uses: docker/build-push-action@v5
+        with:
+          context: backend
+          tags: ${{ vars.DOCKER_HUB_IMAGE }}:${{ inputs.image-tag }}
+          outputs: type=docker,dest=/tmp/image.tar
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: image
+          path: /tmp/image.tar
+
+  integration-tests:
+    runs-on: ubuntu-latest
     needs: [lint, unit-test]
     steps:
       - name: Download artifact
