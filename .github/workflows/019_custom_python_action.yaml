@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Custom Action
-        uses: mock/python-action@0.1.5
+        uses: mock/python-action@0.1.6
         with:
           name: 'John'
         id: custom-action
