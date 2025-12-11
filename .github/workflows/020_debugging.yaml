@@ -1,0 +1,17 @@
+name: 20 Debugging
+
+on:
+  workflow_dispatch:
+
+jobs:
+  debugging-demo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 15
+
