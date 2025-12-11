@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Custom Action
-        uses: mock/docker-action@0.1.0
+        uses: mock/docker-action@0.1.1
         with:
           name: 'John'
         id: custom-action
