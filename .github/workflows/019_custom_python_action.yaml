@@ -1,0 +1,26 @@
+name: 19 Custom Python Action
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Run Custom Action
+        uses: mock/python-action@0.1.0
+        with:
+          name: 'John'
+        id: custom-action
+
+      - name: Print Processed Name
+        run: |
+          echo "Processed Name: ${{ steps.custom-action.outputs.processed-name }}"
+          echo "workdir"
+          ls -al
+
