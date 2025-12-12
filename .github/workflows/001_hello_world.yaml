@@ -5,7 +5,8 @@ on:
 
 jobs:
   say_hello_job:
-    runs-on: ubuntu-latest  # The runner environment
+    runs-on: mock-self-hosted
+    # runs-on: ubuntu-latest  # The runner environment
 
     steps:
       - name: Echo Hello World
