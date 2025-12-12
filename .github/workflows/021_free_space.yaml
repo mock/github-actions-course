@@ -1,0 +1,27 @@
+name: 21 Free Space
+
+on:
+  workflow_dispatch:
+
+jobs:
+  debugging-demo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Maximize GH Runner Space
+        uses: easimon/maximize-build-space@v8
+        with:
+          root-reserve-mb: 40960
+          remove-dotnet: 'true'
+          remove-haskell: 'true'
+          remove-android: 'true'
+          remove-codeql: 'true'
+          remove-docker-images: 'true'
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Tmate Session
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 15
+
