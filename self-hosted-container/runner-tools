@@ -1,0 +1,168 @@
+#!/usr/bin/env python3
+
+"""
+Runner Tools
+
+This will use a Github personal access token to make
+Github Runner API calls.
+"""
+
+import argparse
+import requests
+import json
+
+def parse_args():
+    """Parse arguments for values."""
+    argp = argparse.ArgumentParser()
+
+    argp.add_argument(
+        '--personal-access-token', '-t',
+        help="Github personal access token"
+    )
+
+    argp.add_argument(
+        '--owner', '-o',
+        help="Github repo owner"
+    )
+
+    argp.add_argument(
+        '--repo-name', '-r',
+        help="Github repository name"
+    )
+
+    subp = argp.add_subparsers(dest='command')
+    token = subp.add_parser('get-token')
+
+    runner_list = subp.add_parser('get-list')
+    runner_list.add_argument(
+        '--runner-name', '-r',
+        help="Github Actions Runner name to match in the list (optional)"
+    )
+
+    runner_list = subp.add_parser('get-runner-id')
+    runner_list.add_argument(
+        '--runner-name', '-r',
+        required=True,
+        help="Github Actions Runner name to match for id extraction"
+    )
+
+    return argp.parse_args()
+
+
+def get_headers(personal_access_token):
+    """Return the headers to the API call.
+
+    Args:
+        personal_access_token (string): Github access token
+
+    Returns:
+        A dict of headers for call.
+    """
+    headers = {
+        'Accept': 'application/vnd.github+json',
+        'Authorization': f"Bearer {personal_access_token}",
+        'X-Gtihub-Api-Version': '2022-11-28'
+    }
+
+    return headers
+
+
+def get_token(personal_access_token, owner, repo_name):
+    """Get a registratin token.
+
+    Get a registration toekn for a Runner in the repository
+    specified by the owner and repo name using the
+    personal access token passed.
+
+    Args:
+        personal_access_token (string): Github access token
+        owner (string): Owner of the repository where the Runner exists
+        repo_name (string): Github repo where the Runner exists
+
+    Returns:
+        Registration token for a Runner.
+    """
+    token = ""
+    headers = get_headers(personal_access_token)
+    api_call = f"https://api.github.com/repos/{owner}/{repo_name}/actions/runners/registration-token"
+
+    try:
+        response = requests.post(api_call, headers=headers)
+
+        if response.status_code >= 200 and response.status_code < 300:
+            token = json.loads(response.content.decode('utf-8'))['token']
+        else:
+            response.raise_for_status()
+
+    except Exception as err:
+        print(err)
+
+    return token
+
+
+def get_list(personal_access_token, owner, repo_name):
+    """Get a list of Runners.
+
+    Get the list of Runners in the repository specified
+    by the owner and repo name using the personal access
+    token passed.
+
+    Args:
+        personal_access_token (string): Github access token
+        owner (string): Owner of the repository where the Runner exists
+        repo_name (string): Github repo where the Runner exists
+
+    Returns:
+        List of Runners in JSON format.
+    """
+    runners = []
+    headers = get_headers(personal_access_token)
+    api_call = f"https://api.github.com/repos/{owner}/{repo_name}/actions/runners"
+
+    try:
+        response = reqeusts.get(api_call, headers=headers)
+
+        if response.status_code == 200:
+            runners = json.loads(response.content.decode('utf-8'))['runners']
+            for runner in runners:
+                if runner['name'] == runner_name:
+                    runner_id = runner['id']
+        else:
+            response.raise_for_status()
+    except Exception as err:
+        print(err)
+
+    return runner_id
+
+def main():
+    """Main routine.
+
+    Authenticate with github.com and get access token to use
+    to get an Actions Runner registration token.
+    """
+    args = parse_args()
+
+    if args.command == 'get-token':
+        registration_token = get_token(args.personal_access_token, args.owner, args.repo_name)
+        print(registration_token)
+
+    if args.command == 'get-list':
+        runners = get_list(args.personal_access_token, args.owner, args.repo_name)
+
+        if args.runner_name:
+            for runner in runners:
+                if runner['name'] == args.runner_name:
+                    print("True")
+        else:
+            for runner in runners:
+                print(runner)
+
+    if args.command == 'get-runner-id':
+        runner_id = get_token(args.personal_access_token, args.owner, args.repo_name)
+        print(runner_id)
+
+
+if __name__ == "__main__":
+    main()
+
+
